@@ -30,10 +30,29 @@ defmodule Goth.Config do
     end
   end
 
+  defp decode_json(json) when is_list(json) do
+    json
+    |> Enum.into(%{})
+    |> stringify_keys()
+    |> Map.put("token_source", :oauth)
+  end
+
+  defp stringify_keys(map) do
+    map
+    |> Enum.map(fn {k, v} ->
+      if (!is_atom(k)) do
+        {k, v}
+      else
+        {Atom.to_string(k), v}
+      end
+     end)
+    |> Enum.into(%{})
+  end
+
   # Decodes JSON (if configured) and sets oauth token source
   defp decode_json(json) do
     json
-    |> Poison.decode!
+    |> Poison.decode!()
     |> Map.put("token_source", :oauth)
   end
 
