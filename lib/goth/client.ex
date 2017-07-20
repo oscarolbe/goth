@@ -97,6 +97,8 @@ defmodule Goth.Client do
   def jwt(scope), do: jwt(scope, :os.system_time(:seconds))
   def jwt(scope, iat) do
     {:ok, key} = Config.get(:private_key)
+    key = String.replace(key, "\\n", "\n")
+
     scope
     |> claims(iat)
     |> JsonWebToken.sign(%{alg: "RS256", key: JsonWebToken.Algorithm.RsaUtil.private_key(key)})

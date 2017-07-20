@@ -12,7 +12,6 @@ defmodule Goth.Supervisor do
 
   def init(:ok) do
     children = [
-      worker(Config, []),
       worker(TokenStore, [])
     ]
 
